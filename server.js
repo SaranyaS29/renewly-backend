@@ -48,10 +48,7 @@ app.use('/api/notifications', notificationRoutes);
 
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/renewli', { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true 
-})
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/renewli')
 .then(() => console.log('MongoDB connected'))
 .catch((err) => {
   console.error('MongoDB connection error:', err);
