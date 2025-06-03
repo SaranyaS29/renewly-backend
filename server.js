@@ -7,6 +7,9 @@ const subscriptionRoutes = require('./routes/subscriptionRoutes');
 const notificationRoutes = require('./routes/notificationRoutes'); 
 const socketIo = require('socket.io');
 const http = require('http');
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 dotenv.config();
 // const corsOptions = {
 //   origin:process.env.APPLICATION_URL,
@@ -32,9 +35,7 @@ app.use(cors(corsOptions));
 
 
 
-const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
+
 
 
 // Middleware
