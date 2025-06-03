@@ -15,19 +15,29 @@ dotenv.config();
 //   origin:process.env.APPLICATION_URL,
 //   methods:'GET,HEAD,PUT,PATCH,POST,DELETE',
 // };
-const allowedOrigins = [
-  'http://localhost:5173',                 // your dev frontend
-  'https://renewly-deployment.vercel.app' // your deployed frontend
-];
+
 
 const corsOptions = {
-  origin: function(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // allow request
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'https://renewly-deployment.vercel.app'
+    ];
+
+    // Allow requests with no origin like mobile apps or curl
+    if (!origin) return callback(null, true);
+
+    // Remove trailing slash from origin if present
+    const normalizedOrigin = origin.replace(/\/$/, '');
+
+    if (allowedOrigins.includes(normalizedOrigin)) {
+      callback(null, true);
     } else {
+      console.log('Blocked by CORS - Origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
+  credentials: true,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 };
 
