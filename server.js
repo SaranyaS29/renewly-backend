@@ -8,10 +8,27 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const socketIo = require('socket.io');
 const http = require('http');
 dotenv.config();
+// const corsOptions = {
+//   origin:process.env.APPLICATION_URL,
+//   methods:'GET,HEAD,PUT,PATCH,POST,DELETE',
+// };
+const allowedOrigins = [
+  'http://localhost:5173',                 // your dev frontend
+  'https://renewly-deployment.vercel.app' // your deployed frontend
+];
+
 const corsOptions = {
-  origin:process.env.APPLICATION_URL,
-  methods:'GET,HEAD,PUT,PATCH,POST,DELETE',
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // allow request
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 };
+
+app.use(cors(corsOptions));
 
 
 
@@ -22,7 +39,7 @@ const io = socketIo(server);
 
 // Middleware
 app.use(express.json());
-app.use(cors(corsOptions));
+
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api', subscriptionRoutes);
